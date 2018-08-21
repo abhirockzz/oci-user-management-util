@@ -47,6 +47,8 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 
 ## User creation
 
+### What it does
+
 - creates user
 - generates one time (temporary) password (just like UI) - this needs to be copied and saved for distributing it to users
 - adds to a group
@@ -62,8 +64,12 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 
 ## User deletion
 
+### What it does
+
 - removes user from group
 - deletes the user
+
+### To run
 
 - `cd oci-user-management-util/delete-users-util`
 - `mvn clean install` - check `target` directory for presence of `delete-users-1.0.jar` 
