@@ -42,9 +42,6 @@ public class CreateUsersUtil {
         String configFile = props.getProperty("config_file_path");
         System.out.println("Using Config file " + configFile);
 
-        String compartmentOCID = props.getProperty("tenancy_ocid");
-        System.out.println("Compartment OCID " + compartmentOCID);
-
         String groupOCID = props.getProperty("group_ocid");
         System.out.println("Group OCID " + groupOCID);
 
@@ -88,6 +85,14 @@ public class CreateUsersUtil {
 
         IdentityClient identityClient = new IdentityClient(provider);
         identityClient.setRegion(config.get("region"));
+
+        /**
+         * compartment ID required by the API is nothing but the root
+         * compartment OCID (same as tenancy OCID) see -
+         * https://docs.cloud.oracle.com/iaas/tools/java/latest/com/oracle/bmc/identity/model/CreateUserDetails.html#getCompartmentId--
+         */
+        String compartmentOCID = config.get("tenancy");
+        System.out.println("Compartment OCID " + compartmentOCID);
 
         for (int i = startUserSequence; i < (numOfUsers + startUserSequence); i++) {
 

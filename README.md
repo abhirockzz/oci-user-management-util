@@ -36,7 +36,6 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 		#common parameters
 		
 		config_file_path=/test/oci/config
-		tenancy_ocid=ocid1.tenancy.oc1..aaaaaaaapsj3hr6pl4abnz52jm3wkgf2gfxymbeofzswhcp5jdem3fhjmkeq
 		group_ocid=ocid1.group.oc1..aaaaaaaa46umbo4kgln6jc3q2mgx5o76hycj2g55hjykwnaxz4l6epy72tnq
 		username_prefix=workshop
 		
