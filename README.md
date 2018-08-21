@@ -57,7 +57,7 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 - `cd oci-user-management-util/create-users-util`
 - `mvn clean install` - check `target` directory for presence of `create-users-1.0.jar` 
 - enter configuration in `util.properties`
-- `java -jar target/create-users-1.0.jar util.properties`
+- `java -jar target/create-users-1.0.jar ../util.properties` (you can point to a different properties file as well)
 
 
 ## User deletion
@@ -68,4 +68,4 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 - `cd oci-user-management-util/delete-users-util`
 - `mvn clean install` - check `target` directory for presence of `delete-users-1.0.jar` 
 - enter configuration in `util.properties`
-- `java -jar target/delete-users-1.0.jar util.properties`
+- `java -jar target/delete-users-1.0.jar ../util.properties` (you can point to a different properties file as well)
