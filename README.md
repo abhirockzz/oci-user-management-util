@@ -2,19 +2,36 @@
 
 Java utility to automate user creation and deletion in Oracle Cloud infrastructure
 
-## Pre-requisite and setup
+## Pre-requisites
 
-- You should have `Maven` installed
+- You should have `Maven` and `Git` installed
+- For admin privileged user which can execute user management operations to run the utility
+	- keep the **private key** (`.PEM` format) ready - private key for admin privileged user which can execute user management operations
+	- keep `config` file ready - this should contain info for admin privileged user which can execute user management operations
+		- make sure you have the `DEFAULT` profile specified
+
+			    [DEFAULT]
+			    user=ocid1.user.oc1..aaaaaaaa7grmsqmsx27zuhcqesvb5dvhrwppxtpoxhlvfxvlukuwdypzeg2q
+			    fingerprint=42:82:5f:44:ca:a1:2e:58:d2:63:6a:af:52:d5:3d:42
+			    key_file=/test/private_key.pem
+			    pass_phrase=4242
+				tenancy=ocid1.tenancy.oc1..aaaaaaaapsj3hr6pl4abnz52jm3wkgf2gfxymbeofzswhcp5jdem3fhjmkeq
+			    region=us-phoenix-1
+	- make sure that you enter the full path for your private key in the `key_file` attribute in your `config` file
+
+- for the end user, keep the following ready
+	- public key (`PEM` format as per OCI doc) - this needs to be specified in the properties file for the user creation process
+	- private key (`PEM` format as per OCI doc) - this needs to be provided to end users
+
+## Setup
+
 - `git clone https://github.com/abhirockzz/oci-user-management-util`
-- Seed OCI SDK to your local Maven
+- Seed [OCI SDK](https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/javasdk.htm) to your local Maven repo
 	- `chmod +x seed-oci-sdk-to-maven.sh`
 	- run the script `seed-oci-sdk-to-maven.sh`
-	- it pulls down the [OCI SDK](https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/javasdk.htm) from https://github.com/oracle/oci-java-sdk/releases (change `SDK_VERSION` in the script if needed)
+	- it pulls down the OCI SDK from https://github.com/oracle/oci-java-sdk/releases (change `SDK_VERSION` in the script if needed)
 	- seeds it to local Maven using `mvn install`
-
-## Common
-
-- create a properties file with the required info for creation or deletion (you can use `util.properties` as a template)
+- create a **properties** file with the required info for creation or deletion (you can use `util.properties` as a template)
 
 		#common parameters
 		
@@ -29,23 +46,8 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 		start_user_sequence=101
 		num_of_users=2
 
-- have the private key ready - private key for admin privileged user which can execute user management operations
-- have `config` file ready - this should contain info for admin privileged user which can execute user management operations
-	- make sure you have the `DEFAULT` profile specified
 
-		    [DEFAULT]
-		    user=ocid1.user.oc1..aaaaaaaa7grmsqmsx27zuhcqesvb5dvhrwppxtpoxhlvfxvlukuwdypzeg2q
-		    fingerprint=42:82:5f:44:ca:a1:2e:58:d2:63:6a:af:52:d5:3d:42
-		    key_file=/test/private_key.pem
-		    pass_phrase=4242
-			tenancy=ocid1.tenancy.oc1..aaaaaaaapsj3hr6pl4abnz52jm3wkgf2gfxymbeofzswhcp5jdem3fhjmkeq
-		    region=us-phoenix-1
-	- make sure that you enter the full path for your private key in the `key_file` attribute in your `config` file
-
-- for the end user, keep the following ready
-	- public key (PEM format as per OCI doc) - this needs to be specified in the properties file for the user creation process
-	- private key (PEM format as per OCI doc) - this needs to be provided to end users (by sharing via OCI object store)
-- Both user and deletion utilities lists down the affected users (to be created or deleted) and prompts you for confirmation before triggering the actual process (just to be safe) 
+> Both user and deletion utilities lists down the affected users (to be created or deleted) and prompts you for confirmation before triggering the actual process (just to be safe) 
 
 ## User creation
 

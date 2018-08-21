@@ -100,16 +100,16 @@ public class CreateUsersUtil {
                 CreateUserRequest createUserRequest = CreateUserRequest.builder().createUserDetails(userDetails).build();
                 CreateUserResponse createUserResponse = identityClient.createUser(createUserRequest);
                 User user = createUserResponse.getUser();
-                System.out.println("Created user " + user.getName());
+                //System.out.println("Created user " + user.getName());
 
-                System.out.println("generating password for user");
+                //System.out.println("generating password for user");
                 CreateOrResetUIPasswordResponse createOrResetUIPasswordResponse = identityClient.createOrResetUIPassword(CreateOrResetUIPasswordRequest.builder().userId(user.getId()).build());
                 System.out.println("one time password for " + user.getName() + " " + createOrResetUIPasswordResponse.getUIPassword().getPassword());
 
                 identityClient.addUserToGroup(AddUserToGroupRequest.builder()
                         .addUserToGroupDetails(AddUserToGroupDetails.builder().groupId(groupOCID).userId(user.getId()).build())
                         .build());
-                System.out.println("Added user " + user.getName() + " to group");
+                //System.out.println("Added user " + user.getName() + " to group");
 
                 String key = new String(Files.readAllBytes(Paths.get(publicKeyLocation)));
 
@@ -117,7 +117,7 @@ public class CreateUsersUtil {
                         .userId(user.getId())
                         .createApiKeyDetails(CreateApiKeyDetails.builder().key(key).build())
                         .build());
-                System.out.println("Uploaded API (public) key for user " + user.getName());
+                //System.out.println("Uploaded API (public) key for user " + user.getName());
             } catch (Exception e) {
                 System.out.println("could not create user " + userName + " due to " + e.getMessage());
             }
