@@ -87,7 +87,7 @@ public class CreateUsersUtil {
         }
 
         IdentityClient identityClient = new IdentityClient(provider);
-        identityClient.setRegion(Region.US_ASHBURN_1);
+        identityClient.setRegion(config.get("region"));
 
         for (int i = startUserSequence; i < (numOfUsers + startUserSequence); i++) {
 

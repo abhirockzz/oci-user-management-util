@@ -56,7 +56,7 @@ public class DeleteUsersUtil {
                         .build();
 
         IdentityClient identityClient = new IdentityClient(provider);
-        identityClient.setRegion(Region.US_ASHBURN_1);
+        identityClient.setRegion(config.get("region"));
 
         ListUsersRequest listUsersRequest = ListUsersRequest.builder().compartmentId(compartmentOCID).limit(10000).build();
         List<User> allUsers = identityClient.listUsers(listUsersRequest).getItems();
