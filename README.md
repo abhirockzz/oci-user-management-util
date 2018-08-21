@@ -6,7 +6,9 @@ Java utility to automate user creation and deletion in Oracle Cloud infrastructu
 
 - You should have `Maven` installed
 - `git clone https://github.com/abhirockzz/oci-user-management-util`
-- Seed OCI SDK to your local Maven - run the script `seed-oci-sdk-to-maven.sh`
+- Seed OCI SDK to your local Maven
+	- `chmod +x seed-oci-sdk-to-maven.sh`
+	- run the script `seed-oci-sdk-to-maven.sh`
 	- it pulls down the OCI SDK from https://github.com/oracle/oci-java-sdk/releases (change `SDK_VERSION` in the script if needed)
 	- seeds it to local Maven using `mvn install`
 
