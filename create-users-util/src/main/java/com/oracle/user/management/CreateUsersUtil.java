@@ -1,7 +1,6 @@
 package com.oracle.user.management;
 
 import com.oracle.bmc.ConfigFileReader;
-import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SimplePrivateKeySupplier;
@@ -99,33 +98,50 @@ public class CreateUsersUtil {
             String userName = usernamePrefix + i;
             String description = DESCRIPTION_PREFIX + userName;
 
+            CreateUserDetails userDetails = new CreateUserDetails(compartmentOCID, userName, description, null, null);
+
+            CreateUserRequest createUserRequest = CreateUserRequest.builder().createUserDetails(userDetails).build();
+            CreateUserResponse createUserResponse = null;
             try {
-                CreateUserDetails userDetails = new CreateUserDetails(compartmentOCID, userName, description, null, null);
+                createUserResponse = identityClient.createUser(createUserRequest);
+            } catch (Exception e) {
+                System.out.println("could not create user " + userName + " due to " + e.getMessage());
+                continue; //continue creating other users - skip other steps
+            }
+            User user = createUserResponse.getUser();
 
-                CreateUserRequest createUserRequest = CreateUserRequest.builder().createUserDetails(userDetails).build();
-                CreateUserResponse createUserResponse = identityClient.createUser(createUserRequest);
-                User user = createUserResponse.getUser();
-                //System.out.println("Created user " + user.getName());
+            CreateOrResetUIPasswordResponse createOrResetUIPasswordResponse = null;
+            try {
+                createOrResetUIPasswordResponse = identityClient.createOrResetUIPassword(CreateOrResetUIPasswordRequest.builder().userId(user.getId()).build());
+            } catch (Exception e) {
+                System.out.println("Password generation for user " + userName + " failed due to " + e.getMessage() + FAILED_INSTRUCTION);
+                continue; //continue creating other users - skip other steps
+            }
 
-                //System.out.println("generating password for user");
-                CreateOrResetUIPasswordResponse createOrResetUIPasswordResponse = identityClient.createOrResetUIPassword(CreateOrResetUIPasswordRequest.builder().userId(user.getId()).build());
-                System.out.println("one time password for " + user.getName() + " " + createOrResetUIPasswordResponse.getUIPassword().getPassword());
-
+            try {
                 identityClient.addUserToGroup(AddUserToGroupRequest.builder()
                         .addUserToGroupDetails(AddUserToGroupDetails.builder().groupId(groupOCID).userId(user.getId()).build())
                         .build());
-                //System.out.println("Added user " + user.getName() + " to group");
+            } catch (Exception e) {
+                System.out.println("Group addition for user " + userName + " failed due to " + e.getMessage() + FAILED_INSTRUCTION);
+                continue; //continue creating other users - skip other steps
+            }
 
+            try {
                 String key = new String(Files.readAllBytes(Paths.get(publicKeyLocation)));
 
                 identityClient.uploadApiKey(UploadApiKeyRequest.builder()
                         .userId(user.getId())
                         .createApiKeyDetails(CreateApiKeyDetails.builder().key(key).build())
                         .build());
-                //System.out.println("Uploaded API (public) key for user " + user.getName());
             } catch (Exception e) {
-                System.out.println("could not create user " + userName + " due to " + e.getMessage());
+                System.out.println("Failed to upload public key for user " + userName + " due to " + e.getMessage() + FAILED_INSTRUCTION);
+                continue; //continue creating other users - skip other steps
+
             }
+            System.out.println("User:   " + user.getName() + "      Password:   " + createOrResetUIPasswordResponse.getUIPassword().getPassword());
         }
     }
+    
+    private static String FAILED_INSTRUCTION = ". Either execute this step manually or delete the user and re-run the utility";
 }
