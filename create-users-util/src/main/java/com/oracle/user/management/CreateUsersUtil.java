@@ -118,13 +118,16 @@ public class CreateUsersUtil {
                 continue; //continue creating other users - skip other steps
             }
 
-            try {
-                identityClient.addUserToGroup(AddUserToGroupRequest.builder()
-                        .addUserToGroupDetails(AddUserToGroupDetails.builder().groupId(groupOCID).userId(user.getId()).build())
-                        .build());
-            } catch (Exception e) {
-                System.out.println("Group addition for user " + userName + " failed due to " + e.getMessage() + FAILED_INSTRUCTION);
-                continue; //continue creating other users - skip other steps
+            
+            if (!groupOCID.equals("")) { // do not try to add to group if it has not been specified in properties file
+                try {
+                    identityClient.addUserToGroup(AddUserToGroupRequest.builder()
+                            .addUserToGroupDetails(AddUserToGroupDetails.builder().groupId(groupOCID).userId(user.getId()).build())
+                            .build());
+                } catch (Exception e) {
+                    System.out.println("Group addition for user " + userName + " failed due to " + e.getMessage() + FAILED_INSTRUCTION);
+                    continue; //continue creating other users - skip other steps
+                }
             }
 
             try {
@@ -142,6 +145,6 @@ public class CreateUsersUtil {
             System.out.println("User:   " + user.getName() + "      Password:   " + createOrResetUIPasswordResponse.getUIPassword().getPassword());
         }
     }
-    
+
     private static String FAILED_INSTRUCTION = ". Either execute this step manually or delete the user and re-run the utility";
 }

@@ -1,0 +1,7 @@
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaa7grmsqmsx27zuhcqesvb5dvhrwppxtpoxhlvfxvlukuwdypzeg2q
+fingerprint=1a:3c:38:9a:f8:ea:67:b0:a8:76:7e:88:f1:3f:19:cf
+key_file=oci_api_key.pem
+tenancy=ocid1.tenancy.oc1..aaaaaaaapsj3hr6pl4abnz52jm3wkgf2gfxymbeofzswhcp5jdem3fhjmkeq
+region=us-phoenix-1
+pass_phrase=1987
